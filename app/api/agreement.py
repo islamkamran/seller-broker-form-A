@@ -22,7 +22,7 @@ class AgreementPDF(FPDF):
         self.set_font("Arial", size=10)  # Set default font
     
     def header(self):
-        self.image("uploads/indus.png", x=25, y=10, w=25)  # Smaller image, adjusted position
+        self.image("uploads/indus.png", x=25, y=5, w=25)  # Smaller image, adjusted position
         self.set_font("Arial", "B", 14)  # Slightly smaller title
         self.cell(0, 8, "AGENT TO AGENT AGREEMENT", ln=1, align="C")
         self.set_font("Arial", "", 9)  # Smaller subtitle
@@ -44,8 +44,8 @@ class AgreementPDF(FPDF):
         
     def bordered_section(self, title, data):
         # More conservative height estimation
-        estimated_height = (len(data) * 7) + 15
-        if self.get_y() + estimated_height > self.h - 40:
+        estimated_height = (len(data) * 7) + 10
+        if self.get_y() + estimated_height > self.h - 10:
             self.add_page()
             
         x_start = self.get_x()
@@ -88,121 +88,156 @@ def generate_agreement(data: dict) -> str:
     pdf = AgreementPDF()
     pdf.add_page()
     
-    # Header with date
+    # Header with contract number instead of date
     pdf.set_font("Arial", "", 9)
-    pdf.cell(0, 5, f"Date: {data['dated']}", ln=1, align="R")
-    pdf.ln(8)
+    pdf.cell(0, 5, f"Contract Number: {data['contract_number']}", ln=1, align="R")
+    pdf.ln(4)
     
-    # PART 1: THE PARTIES
-    pdf.section_title("PART 1 - THE PARTIES")
+    # PART 1: AGENT DETAILS
+    pdf.section_title("PART 1 - AGENT DETAILS")
     
-    # Agent A Section (updated with all fields)
-    agent_a_data = {
-        "Establishment": data['agent_a_establishment'],
-        "Address": data['agent_a_address'],
-        "Phone": data['agent_a_phone'],
-        "Fax": data['agent_a_fax'],
-        "Email": data['agent_a_email'],
-        "OR Number": data['agent_a_orn'],
-        "License": data['agent_a_license'],
-        "PO Box": data['agent_a_po_box'],
-        "Emirates": data['agent_a_emirates'],
-        "Agent Name": data['agent_a_name'],
-        "BRN": data['agent_a_brn'],
-        "Date Issued": data['agent_a_date_issued'],
-        "Mobile": data['agent_a_mobile'],
-        "Personal Email": data['agent_a_email_personal']
+    agent_data = {
+        "Office Name": data['office_name'],
+        "License Authority": data['license_authority'],
+        "OR Number": data['agent_orn'],
+        "License No": data['agent_license_no'],
+        "Fax": data['agent_fax'],
+        "Phone": data['agent_phone'],
+        "Address": data['agent_address'],
+        "Email": data['agent_email'],
+        "Agent Name": data['agent_name'],
+        "BRN": data['agent_brn'],
+        "Mobile": data['agent_mobile'],
+        "Personal Email": data['agent_email_personal']
     }
-    pdf.bordered_section("A) THE AGENT (LANDLORD'S AGENT)", agent_a_data)
-    
-    # Agent B Section (updated with all fields)
-    agent_b_data = {
-        "Establishment": data['agent_b_establishment'],
-        "Address": data['agent_b_address'],
-        "Phone": data['agent_b_phone'],
-        "Fax": data['agent_b_fax'],
-        "Email": data['agent_b_email'],
-        "OR Number": data['agent_b_orn'],
-        "License": data['agent_b_license'],
-        "PO Box": data['agent_b_po_box'],
-        "Emirates": data['agent_b_emirates'],
-        "Agent Name": data['agent_b_name'],
-        "BRN": data['agent_b_brn'],
-        "Date Issued": data['agent_b_date_issued'],
-        "Mobile": data['agent_b_mobile'],
-        "Personal Email": data['agent_b_email_personal']
-    }
-    pdf.bordered_section("B) THE AGENT (TENANT'S AGENT)", agent_b_data)
-    pdf.ln(8)
-    
-    # PART 2: THE PROPERTY
-    pdf.section_title("PART 2 - THE PROPERTY")
-    
-    property_data = {
-        "Address": data['property_address'],
-        "Master Developer": data['master_developer'],
-        "Master Project": data['master_project'],
-        "Building Name": data['building_name'],
-        "Listed Price": data['listed_price'],
-        "Description": data['property_description'],
-        "MOU Exists": "Yes" if data['mou_exist'] else "No",
-        "Property Tenanted": "Yes" if data['property_tenanted'] else "No",
-        "Maintenance Description Fee P.A": f"{data['maintenance_description']} per sq.ft"
-    }
-    pdf.bordered_section("PROPERTY DETAILS", property_data)
-    pdf.ln(8)
-    
-    # PART 3: THE COMMISSION
-    pdf.section_title("PART 3 - THE COMMISSION")
-    
-    commission_data = {
-        "Seller Agent %": f"{data['seller_agent_percent']}%",
-        "Buyer Agent %": f"{data['buyer_agent_percent']}%",
-        "Buyer Name": data['buyer_name'],
-        "Transfer Fee Paid By": data['transfer_fee'].replace(",", " & "),
-        "Pre-Finance Approval": "Yes" if data['pre_finance_approval'] else "No",
-        "Buyer Contacted Agent": "Yes" if data['buyer_contacted_agent'] else "No"
-    }
-    pdf.bordered_section("COMMISSION DETAILS", commission_data)
-    pdf.ln(8)
-    
-    # PART 4: SIGNATURES
-    pdf.section_title("PART 4 - SIGNATURES")
-    
-    # Notice text with better formatting
-    pdf.set_font("Arial", "", 9)
-    notice_text = [
-        "Both Agents are required to co-operate fully, complete this FORM & BOTH retain a fully signed & stamped copy on file."
-    ]
-    
-    for line in notice_text:
-        if line:
-            pdf.cell(0, 5, line, ln=1)
-        else:
-            pdf.ln(3)
-    
+    pdf.bordered_section("AGENT INFORMATION", agent_data)
     pdf.ln(10)
     
-    # Signature lines with actual signatures
-    pdf.set_font("Arial", "", 10)
-    # Agent A Section
-    # First get the current Y position
-    start_y = pdf.get_y()
-
-    # Signature
-    pdf.cell(50, 10, f"Agent A: {data['agent_a_signature']}", 0, 0, "C")
-    # Stamp (positioned relative to signature)
-    pdf.image("uploads/stamp.png", x=30, y=start_y-5, w=40)
-
-    # Agent B Section - same approach
-    start_y = pdf.get_y() - 5  # Reset to align with Agent A section
-    pdf.cell(110, 10, f"Agent B: {data['agent_b_signature']}", 0, 0, "C")
+    # PART 2: OWNER DETAILS
+    pdf.section_title("PART 2 - OWNER DETAILS")
     
-    # Move down for the "Signature & Stamp" label
-    pdf.ln(15)  # Adjust this value to position the text properly
-    pdf.cell(50, 10, "Signature & Stamp", 0, 0, "C")
-
-
+    owner_data = {
+        "Name": data['name_of_owner'],
+        "ID Card Number": data['id_card_number'],
+        "Nationality": data['nationality'],
+        "Passport Number": data['passport_number'],
+        "Expiry Date": data['expiry_date'],
+        "Mobile": data['owner_mobile'],
+        "PO Box": data['po_box'],
+        "Phone": data['owner_phone'],
+        "Fax": data['owner_fax'],
+        "Address": data['owner_address'],
+        "Email": data['owner_email']
+    }
+    pdf.bordered_section("OWNER INFORMATION", owner_data)
+    pdf.ln(140)
+    
+    # PART 3: PROPERTY DETAILS
+    pdf.section_title("PART 3 - PROPERTY DETAILS")
+    
+    property_data = {
+        "Property Status": data['property_status'],
+        "Plot Number": data['plot_number'],
+        "Type of Area": data['type_of_area'],
+        "Title Deed Number": data['title_deed_number'],
+        "Location": data['property_location'],
+        "Property Number": data['property_number'],
+        "Type": data['type_of_property'],
+        "Project Name": data['project_name'],
+        "Area": data['property_area'],
+        "Owners Association No": data['owners_association_no'],
+        "Present Use": data['present_use'],
+        "Community Number": data['community_number'],
+        "Approx. Age": data['property_approx_age'],
+        "No. of Car Parks": data['no_of_car_parks'],
+        "No. of Bedrooms": data['no_of_bedrooms'],
+        "No. of Bathrooms": data['no_of_bathrooms'],
+        "No. of Kitchens": data['no_of_kitchens'],
+        "No. of Units": ", ".join(data['no_of_units']),
+        "Floor No": data['floor_no'],
+        "No. of Floors": data['no_of_floors'],
+        "No. of Shops": data['no_of_shops'],
+        "Facilities": data['facilities'],
+        "Extra Facilities": data['extra_facilities'],
+        "Additional Information": data['additional_information']
+    }
+    pdf.bordered_section("PROPERTY INFORMATION", property_data)
+    pdf.ln(40)
+    
+    # PART 4: FINANCIAL DETAILS
+    pdf.section_title("PART 4 - FINANCIAL DETAILS")
+    
+    financial_data = {
+        "Listed Price": data['listed_price'],
+        "Original Price": data['orignal_price'],
+        "Paid Amount": data['paid_amount'],
+        "Balance Amount": data['balance_amount'],
+        "Service Charge": data['service_charge'],
+        "Mortgage Status": data['mortgage_status'],
+        "Mortgage Registration No": data['mortgage_registeration_no'],
+        "Bank": data['bank'],
+        "Mortgage Amount": data['mortgage_amount'],
+        "Pre-Closure Charges": data['pre_closure_charges'],
+        "Payment Schedule": data['payment_schedule'],
+        "Next Payment Date": data['payment_date'],
+        "Amount (AED)": data['amount_aed'],
+        "Is Property Rented": "Yes" if data['is_property_rented'] else "No",
+        "Contract Start Date": data['contract_start_date'],
+        "Contract End Date": data['contract_end_date'],
+        "Commission Amount": data['commission_amount']
+    }
+    pdf.bordered_section("FINANCIAL INFORMATION", financial_data)
+    pdf.ln(8)
+    
+    # PART 5: CONTRACT DETAILS
+    pdf.section_title("PART 5 - CONTRACT DETAILS")
+    
+    contract_data = {
+        "Contract Type": data['contract_type'],
+        "Activity Reporting": data['activity_reporting']
+    }
+    pdf.bordered_section("CONTRACT INFORMATION", contract_data)
+    pdf.ln(40)
+    
+    # PART 6: SIGNATURES
+    pdf.section_title("PART 6 - SIGNATURES")
+    
+    # Broker Office Signature
+    pdf.set_font("Arial", "B", 10)
+    pdf.cell(0, 10, "Broker Office:", ln=1)
+    pdf.set_font("Arial", "", 10)
+    
+    broker_data = f"Name: {data['broker_office_name']}      Title: {data['broker_office_title']}        Dated: {data['broker_office_signature_date']}"
+    
+    # Broker signature and stamp
+    start_y = pdf.get_y()
+    
+    pdf.multi_cell(120, 0, str(broker_data), 0, "L")
+    pdf.image("uploads/stamp.png", x=30, y=start_y-12, w=40)
+    pdf.ln(25)
+    
+    # Owner Signature
+    pdf.set_font("Arial", "B", 10)
+    pdf.cell(0, 6, "Owner:", ln=1)
+    pdf.set_font("Arial", "", 10)
+    
+    owner_sig_data = f"Name: {data['owner_name']}       Dated: {data['broker_office_signature_date']}"
+    
+    start_y = pdf.get_y()
+    pdf.multi_cell(120, 6, str(owner_sig_data), 0, "L")
+    pdf.ln(25)
+    
+    # Legal Representative (if exists)
+    if data['legal_representative']:
+        pdf.set_font("Arial", "B", 10)
+        pdf.cell(0, 6, "Legal Representative:", ln=1)
+        pdf.set_font("Arial", "", 10)
+        
+        legal_data = f"Name: {data['legal_representative']}     Attorney Number: {data['attorney_number']}      Dated: {data['broker_office_signature_date']}"
+        
+        start_y = pdf.get_y()
+        pdf.multi_cell(150, 6, str(legal_data), 0, "L")
+    
     # Save PDF
     os.makedirs("pdf_output", exist_ok=True)
     filename = f"pdf_output/agreement_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
@@ -269,8 +304,6 @@ async def create_agreement(
     mortgage_status: str = Form(...),
     mortgage_registeration_no: str = Form(...),
     bank: str = Form(...),
-
-    # ------------------------- start from here ----------------------
     mortgage_amount: str = Form(...),
     pre_closure_charges: str = Form(...),
     payment_schedule: str = Form(...),
@@ -294,9 +327,6 @@ async def create_agreement(
     db: Session = Depends(get_db)
 ):
     # Convert form data to dict
-
-    transfer_fee_str = ",".join(transfer_fee)  # "buyer,seller"
-    print(transfer_fee_str)
     agreement_data = {
         "contract_number": contract_number,
         "office_name": office_name,
@@ -354,19 +384,26 @@ async def create_agreement(
         "mortgage_status":mortgage_status,
         "mortgage_registeration_no":mortgage_registeration_no,
         "bank":bank,
-        # ------------------------- start from here ----------------------
-
-        "mou_exist": mou_exist.lower() == "yes",
-        "property_tenanted":property_tenanted.lower() == "yes",
-        "maintenance_description":maintenance_description,
-        "seller_agent_percent":seller_agent_percent,
-        "buyer_agent_percent":buyer_agent_percent,
-        "buyer_name":buyer_name,
-        "transfer_fee": transfer_fee_str,
-        "pre_finance_approval": pre_finance_approval.lower() == "yes",
-        "buyer_contacted_agent": buyer_contacted_agent.lower() == "yes",
-        "agent_a_signature": agent_a_signature,
-        "agent_b_signature": agent_b_signature
+        "mortgage_amount": mortgage_amount,
+        "pre_closure_charges": pre_closure_charges,
+        "payment_schedule": payment_schedule,
+        "payment_date": payment_date,
+        "amount_aed": amount_aed,
+        "is_property_rented":is_property_rented.lower() == "yes",
+        "contract_start_date":contract_start_date,
+        "contract_end_date":contract_end_date,
+        "commission_amount":commission_amount,
+        "contract_type":contract_type,
+        "activity_reporting": activity_reporting,
+        "broker_office_name": broker_office_name,
+        "broker_office_title": broker_office_title,
+        "broker_office_signature_date": broker_office_signature_date,
+        "broker_office_signature": broker_office_signature,
+        "owner_name": owner_name,
+        "owner_signature": owner_signature,
+        "legal_representative":legal_representative,
+        "attorney_number": attorney_number,
+        "legal_representative_signature": legal_representative_signature
     }
 
     # Create database record

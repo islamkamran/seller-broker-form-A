@@ -4,63 +4,82 @@ from typing import Optional
 from typing import List, Optional
 
 class AgentAgreementBase(BaseModel):
-    # Agreement Info
-    dated: date
-    
-    # Agent A
-    agent_a_establishment: str
-    agent_a_address: str
-    agent_a_phone: str
-    agent_a_fax: str
-    agent_a_email: str
-    agent_a_orn: str
-    agent_a_license: str
-    agent_a_po_box: str
-    agent_a_emirates: str
-    agent_a_name: str
-    agent_a_brn: str
-    agent_a_date_issued: date
-    agent_a_mobile: str
-    agent_a_email_personal: str
-    
-    # Agent B
-    agent_b_establishment: str
-    agent_b_address: str
-    agent_b_phone: str
-    agent_b_fax: str
-    agent_b_email: str
-    agent_b_orn: str
-    agent_b_license: str
-    agent_b_po_box: str
-    agent_b_emirates: str
-    agent_b_name: str
-    agent_b_brn: str
-    agent_b_date_issued: date
-    agent_b_mobile: str
-    agent_b_email_personal: str
-    
-    # Property
-    property_address: str
-    master_developer: str
-    master_project: str
-    building_name: str
-    listed_price: str
-    property_description: str
-    mou_exist: bool
-    property_tenanted: bool
-    maintenance_description: str
-    
-    # Commission
-    seller_agent_percent: str
-    buyer_agent_percent: str
-    buyer_name: str
-    transfer_fee: List[str]
-    pre_finance_approval: bool
-    buyer_contacted_agent: bool
-
-    # Signature
-    agent_a_signature: str
-    agent_b_signature: str
+    contract_number: str
+    office_name: str
+    license_authority: str
+    agent_orn:str
+    agent_license_no:str
+    agent_fax:str
+    agent_phone:str
+    agent_address:str
+    agent_emai:str
+    agent_name:str
+    agent_brn:str
+    agent_mobile:str
+    agent_email_personal:str
+    name_of_owner:str
+    id_card_number:str
+    nationality:str
+    passport_number:str
+    expiry_date:date
+    owner_mobile:str
+    po_box:str
+    owner_phone:str
+    owner_fax:str
+    owner_address:str
+    owner_email:str
+    property_status:str
+    plot_number:str
+    type_of_area:str
+    title_deed_number:str
+    property_location:str
+    property_number:str
+    type_of_property:str
+    project_name:str
+    property_area:str
+    owners_association_no:str
+    present_use:str
+    community_number:str
+    property_approx_age:str
+    no_of_car_parks:str
+    no_of_bedrooms:str
+    no_of_bathrooms:str
+    no_of_kitchens:str
+    no_of_units:str
+    floor_no:str
+    no_of_floors:str
+    no_of_shops:str
+    facilities:str
+    extra_facilities:str
+    additional_information:str
+    listed_price:str
+    orignal_price:str
+    paid_amount:str
+    balance_amount:str
+    service_charge:str
+    mortgage_status:str
+    mortgage_registeration_no:str
+    bank:str
+    mortgage_amount: str
+    pre_closure_charges: str
+    payment_schedule: str
+    payment_date: str
+    amount_aed: str
+    is_property_rented:bool
+    contract_start_date:date
+    contract_end_date:date
+    commission_amount:str
+    contract_type:str
+    activity_reporting: str
+    broker_office_name: str
+    broker_office_title: str
+    broker_office_signature_date: date
+    broker_office_signature: str
+    owner_name: str
+    owner_signature: str
+    legal_representative:str
+    attorney_number: str
+    legal_representative_signature: str
 
 class AgentAgreementCreate(AgentAgreementBase):
     pass
