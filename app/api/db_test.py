@@ -8,8 +8,8 @@ import os
 load_dotenv()
 
 # Create the database engine
-SQL_DATABASE_URI = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@localhost:8889/a_to_a_form"
-engine = create_engine(SQL_DATABASE_URI)
+SQL_DATABASE_URI_AWS = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@indusform-db-identifier.cfu6suc24hx8.ap-south-1.rds.amazonaws.com/reraforma"
+engine = create_engine(SQL_DATABASE_URI_AWS)
 
 # Create a session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
