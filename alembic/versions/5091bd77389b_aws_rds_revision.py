@@ -1,8 +1,8 @@
-"""Model created for RERA form A
+"""AWS RDS revision
 
-Revision ID: 724a3dc6cb88
+Revision ID: 5091bd77389b
 Revises: 
-Create Date: 2025-07-09 09:55:16.251463
+Create Date: 2025-07-28 17:09:27.998303
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '724a3dc6cb88'
+revision: str = '5091bd77389b'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
