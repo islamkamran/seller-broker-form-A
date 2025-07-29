@@ -50,6 +50,7 @@ origins = [
     "https://localhost.tiangolo.com",
     "http://localhost",
     "http://localhost:8080",
+    "http://ec2-3-109-200-134.ap-south-1.compute.amazonaws.com/"
 ]
 
 

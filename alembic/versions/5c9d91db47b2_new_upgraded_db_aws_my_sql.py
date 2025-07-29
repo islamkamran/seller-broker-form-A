@@ -1,8 +1,8 @@
-"""AWS RDS revision
+"""new upgraded DB AWS my SQL
 
-Revision ID: 5091bd77389b
+Revision ID: 5c9d91db47b2
 Revises: 
-Create Date: 2025-07-28 17:09:27.998303
+Create Date: 2025-07-29 15:42:05.922294
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '5091bd77389b'
+revision: str = '5c9d91db47b2'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
