@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AGENT TO AGENT AGREEMENT</title>
+    <title>CONTRACT BETWEEN SELLER AND BROKER</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -43,12 +43,6 @@
         table th {
             background-color: #f0f0f0;
         }
-        .section-title {
-            font-weight: bold;
-            text-decoration: underline;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
         .form-control {
             width: 100%;
             padding: 6px;
@@ -79,6 +73,28 @@
         input[type="radio"] {
             margin-right: 5px;
         }
+        .location-selector {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        #previewContainer {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+        }
+        .download-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -88,7 +104,17 @@
             <h2>CONTRACT BETWEEN SELLER AND BROKER (A)</h2>
         </div>
 
-        <form method="POST" action="/v1/submit-agreement" enctype="multipart/form-data">
+        <form id="agreementForm" method="POST" action="/v1/submit-seller-broker-agreement" enctype="multipart/form-data">
+            <div class="location-selector">
+                <label><strong>Select Location:</strong></label>
+                <label>
+                    <input type="radio" name="location" value="DMCC" checked onchange="updateOfficeDetails()"> DMCC
+                </label>
+                <label>
+                    <input type="radio" name="location" value="LLC" onchange="updateOfficeDetails()"> LLC
+                </label>
+            </div>
+
             <table>
                 <tr>
                     <td>Contract Number:</td>
@@ -98,56 +124,47 @@
                     <th colspan="2">PART 1 [THE PARTIES]</th>
                 </tr>
                 
-                <!-- Agent A Section -->
+                <!-- Broker Office Section -->
                 <tr>
                     <th colspan="2">THE BROKER OFFICE / AGENT DETAILS</th>
                 </tr>
                 <tr>
                     <td>Office Name:</td>
-                    <td><input type="text" name="office_name" class="form-control" value=""></td>
+                    <td><input type="text" name="office_name" id="office_name" class="form-control" value="Indus Real Estate (LLC) DMCC Branch" readonly></td>
                 </tr>
                 <tr>
                     <td>License Authority:</td>
-                    <td><input type="text" name="license_authority" class="form-control" value=""></td>
+                    <td><input type="text" name="license_authority" id="license_authority" class="form-control" value="DMCC" readonly></td>
                 </tr>
                 <tr>
                     <td>ORN:</td>
-                    <td><input type="text" name="agent_orn" class="form-control" value=""></td>
+                    <td><input type="text" name="agent_orn" id="agent_orn" class="form-control" value="22926" readonly></td>
                 </tr>
                 <tr>
                     <td>License No.:</td>
-                    <td><input type="text" name="agent_license_no" class="form-control" value=""></td>
+                    <td><input type="text" name="agent_license_no" id="agent_license_no" class="form-control" value="DMCC-446268" readonly></td>
                 </tr>
                 <tr>
                     <td>Fax:</td>
-                    <td><input type="text" name="agent_fax" class="form-control" value=""></td>
+                    <td><input type="text" name="agent_fax" id="agent_fax" class="form-control" value="04 241 2888" readonly></td>
                 </tr>
                 <tr>
                     <td>Phone:</td>
-                    <td><input type="text" name="agent_phone" class="form-control" value=""></td>
+                    <td><input type="text" name="agent_phone" id="agent_phone" class="form-control" value="04 241 2888" readonly></td>
                 </tr>
                 <tr>
                     <td>Address:</td>
-                    <td><input type="text" name="agent_address" class="form-control" value=""></td>
+                    <td><input type="text" name="agent_address" id="agent_address" class="form-control" value="Office 4H Almas Tower, JLT, DMCC, Dubai, UAE" readonly></td>
                 </tr>
                 <tr>
                     <td>Email:</td>
-                    <td><input type="text" name="agent_email" class="form-control" value=""></td>
+                    <td><input type="text" name="agent_email" id="agent_email" class="form-control" value="reception@indusre.ae" readonly></td>
                 </tr>
                 <tr>
                     <td>Registered Agent:<span style="color: red;">*</span></td>
                     <td><select name="agent_name" id="agent_name" class="form-control" required>
                         <option value="" disabled selected>Select an Agent</option>
-                        <option name="agent_name" value="TAMIR ABDELKARIM" data-brn="76172" data-mobile="507109122" data-email="tamir.abdelkarim@indusre.ae">TAMIR ABDELKARIM</option>
-                        <option name="agent_name" value="RUPESH KUMAR GOVINDANI" data-brn="76013" data-mobile="529711668" data-email="rupesh.govindani@indusre.ae">RUPESH KUMAR GOVINDANI</option>
-                        <option name="agent_name" value="DAWYNNE DARRYL PETERSEN" data-brn="73501" data-mobile="585708097" data-email="dawynne.petersen@indusre.ae">DAWYNNE DARRYL PETERSEN</option>
-                        <option name="agent_name" value="DIPTI NAIR" data-brn="48604" data-mobile="556610924" data-email="dipti.nair@indusre.ae">DIPTI NAIR</option>
-                        <option name="agent_name" value="LI LI HSIEH CHEN TSAI TAO" data-brn="42414" data-mobile="568853394" data-email="kim.hsieh@indusre.ae">LI LI HSIEH CHEN TSAI TAO</option>
-                        <option name="agent_name" value="PAURAS PRAVINCHANDRA SHAH" data-brn="52032" data-mobile="561624784" data-email="pauras@indusre.ae">PAURAS PRAVINCHANDRA SHAH</option>
-                        <option name="agent_name" value="TAHSEEN IBRAHIM MUNSHI" data-brn="55464" data-mobile="527186123" data-email="Tahseen.munshi@indusre.ae">TAHSEEN IBRAHIM MUNSHI</option>
-                        <option name="agent_name" value="SAGAR ABBAS" data-brn="37908" data-mobile="558148095" data-email="sagar@indusre.ae">SAGAR ABBAS</option>
-                        <option name="agent_name" value="NARDOS GIDEY BIRHANU" data-brn="82279" data-mobile="502258701" data-email="nardos.gidey@indusre.ae">NARDOS GIDEY BIRHANU</option>
-                        <option name="agent_name" value="MELANIE JANE O KEEFE" data-brn="56089" data-mobile="585087377" data-email="mel.okeefe-jones@indusre.ae">MELANIE JANE O KEEFE</option>
+                        <!-- Options will be populated by JavaScript -->
                     </select>
                     </td>
                 </tr>
@@ -161,30 +178,30 @@
                 </tr>
                 <tr>
                     <td>Email:</td>
-                    <td><input type="email" name="agent_email_personal" id="agent_email"  class="form-control" required></td>
+                    <td><input type="email" name="agent_email_personal" id="agent_email_personal" class="form-control" required></td>
                 </tr>
+            </table>
 
-                </table>
-                <table>
-                <!-- Property Owner Section -->
+            <!-- Property Owner Section -->
+            <table>
                 <tr>
-                    <th colspan="2">THE PROPERTY OWNER’S DETAILS</th>
+                    <th colspan="2">THE PROPERTY OWNER'S DETAILS</th>
                 </tr>
                 <tr>
                     <td>Name of Owner:</td>
-                    <td><input type="text" name="name_of_owner" class="form-control" value=""></td>
+                    <td><input type="text" name="name_of_owner" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>ID Card Number:</td>
-                    <td><input type="text" name="id_card_number" class="form-control" value=""></td>
+                    <td><input type="text" name="id_card_number" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Nationality:</td>
-                    <td><input type="text" name="nationality" class="form-control" value=""></td>
+                    <td><input type="text" name="nationality" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Passport Number:</td>
-                    <td><input type="text" name="passport_number" class="form-control" value=""></td>
+                    <td><input type="text" name="passport_number" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Expiry Date:</td>
@@ -192,31 +209,31 @@
                 </tr>
                 <tr>
                     <td>Mobile:</td>
-                    <td><input type="text" name="owner_mobile" class="form-control" value=""></td>
+                    <td><input type="text" name="owner_mobile" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>P.O.Box:</td>
-                    <td><input type="text" name="po_box" class="form-control" value=""></td>
+                    <td><input type="text" name="po_box" class="form-control"></td>
                 </tr>
                 <tr>
                     <td>Phone:</td>
-                    <td><input type="text" name="owner_phone" class="form-control" value=""></td>
+                    <td><input type="text" name="owner_phone" class="form-control"></td>
                 </tr>
                 <tr>
                     <td>Fax:</td>
-                    <td><input type="text" name="owner_fax" class="form-control" value=""></td>
+                    <td><input type="text" name="owner_fax" class="form-control"></td>
                 </tr>
                 <tr>
                     <td>Address:</td>
-                    <td><input type="text" name="owner_address" class="form-control" value=""></td>
+                    <td><input type="text" name="owner_address" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Email:</td>
-                    <td><input type="text" name="owner_email" class="form-control" value=""></td>
+                    <td><input type="email" name="owner_email" class="form-control" required></td>
                 </tr>
+            </table>
 
-                </table>
-
+            <!-- Property Details Section -->
             <table>
                 <tr>
                     <th colspan="2">PART 2 [THE PROPERTY]</th>
@@ -226,39 +243,39 @@
                 </tr>
                 <tr>
                     <td>Property Status:</td>
-                    <td><input type="text" name="property_status" class="form-control"></td>
+                    <td><input type="text" name="property_status" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Plot Number:</td>
-                    <td><input type="text" name="plot_number" class="form-control"></td>
+                    <td><input type="text" name="plot_number" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Type of Area:</td>
-                    <td><input type="text" name="type_of_area" class="form-control"></td>
+                    <td><input type="text" name="type_of_area" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Title Deed Number:</td>
-                    <td><input type="text" name="title_deed_number" class="form-control"></td>
+                    <td><input type="text" name="title_deed_number" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Location:</td>
-                    <td><input type="text" name="property_location" class="form-control"></td>
+                    <td><input type="text" name="property_location" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Property Number:</td>
-                    <td><input type="text" name="property_number" class="form-control"></td>
+                    <td><input type="text" name="property_number" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Type of Property:</td>
-                    <td><input type="text" name="type_of_property" class="form-control"></td>
+                    <td><input type="text" name="type_of_property" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Project Name:</td>
-                    <td><input type="text" name="project_name" class="form-control"></td>
+                    <td><input type="text" name="project_name" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Area:</td>
-                    <td><input type="text" name="property_area" class="form-control"></td>
+                    <td><input type="text" name="property_area" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Owner's Association No.:</td>
@@ -266,7 +283,7 @@
                 </tr>
                 <tr>
                     <td>Present Use:</td>
-                    <td><input type="text" name="present_use" class="form-control"></td>
+                    <td><input type="text" name="present_use" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Community Number:</td>
@@ -278,31 +295,31 @@
                 </tr>
                 <tr>
                     <td>No. of Car Parks:</td>
-                    <td><input type="text" name="no_of_car_parks" class="form-control"></td>
+                    <td><input type="text" name="no_of_car_parks" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>No. of Bedrooms:</td>
-                    <td><input type="text" name="no_of_bedrooms" class="form-control"></td>
+                    <td><input type="text" name="no_of_bedrooms" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>No. of Bathrooms:</td>
-                    <td><input type="text" name="no_of_bathrooms" class="form-control"></td>
+                    <td><input type="text" name="no_of_bathrooms" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>No. of Kitchens:</td>
-                    <td><input type="text" name="no_of_kitchens" class="form-control"></td>
+                    <td><input type="text" name="no_of_kitchens" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>No. of Units/ Unit Number:</td>
-                    <td><input type="text" name="no_of_units" class="form-control"></td>
+                    <td><input type="text" name="no_of_units" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Floor No.:</td>
-                    <td><input type="text" name="floor_no" class="form-control"></td>
+                    <td><input type="text" name="floor_no" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>No. of Floors:</td>
-                    <td><input type="text" name="no_of_floors" class="form-control"></td>
+                    <td><input type="text" name="no_of_floors" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>No. of Shops:</td>
@@ -310,7 +327,7 @@
                 </tr>
                 <tr>
                     <td>Facilities:</td>
-                    <td><input type="text" name="facilities" class="form-control"></td>
+                    <td><input type="text" name="facilities" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Extra Facilities:</td>
@@ -318,30 +335,30 @@
                 </tr>
                 <tr>
                     <td>Additional Information:</td>
-                    <td><input type="text" name="additional_information" class="form-control"></td>
+                    <td><textarea name="additional_information" class="form-control"></textarea></td>
                 </tr>
-
             </table>
 
+            <!-- Property Financials Section -->
             <table>
                 <tr>
                     <th colspan="2">PROPERTY FINANCIALS</th>
                 </tr>
                 <tr>
                     <td>Listed Price:</td>
-                    <td><input type="text" name="listed_price" class="form-control"></td>
+                    <td><input type="text" name="listed_price" class="form-control" required></td>
                 </tr>
                 <tr>
-                    <td>Orignal Price:</td>
-                    <td><input type="text" name="orignal_price" class="form-control"></td>
+                    <td>Original Price:</td>
+                    <td><input type="text" name="original_price" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Paid Amount:</td>
-                    <td><input type="text" name="paid_amount" class="form-control"></td>
+                    <td><input type="text" name="paid_amount" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Balance Amount:</td>
-                    <td><input type="text" name="balance_amount" class="form-control"></td>
+                    <td><input type="text" name="balance_amount" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Service Charge:</td>
@@ -349,11 +366,17 @@
                 </tr>
                 <tr>
                     <td>Mortgage Status:</td>
-                    <td><input type="text" name="mortgage_status" class="form-control"></td>
+                    <td>
+                        <select name="mortgage_status" class="form-control">
+                            <option value="None">None</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
-                    <td>Mortgage Registeration No.:</td>
-                    <td><input type="text" name="mortgage_registeration_no" class="form-control"></td>
+                    <td>Mortgage Registration No.:</td>
+                    <td><input type="text" name="mortgage_registration_no" class="form-control"></td>
                 </tr>
                 <tr>
                     <td>Bank:</td>
@@ -368,18 +391,20 @@
                     <td><input type="text" name="pre_closure_charges" class="form-control"></td>
                 </tr>
                 <tr>
-                    <td>Payment_schedule:</td>
+                    <td>Payment Schedule:</td>
                     <td><input type="text" name="payment_schedule" class="form-control"></td>
                 </tr>
                 <tr>
                     <td>Date:</td>
-                    <td><input type="date" name="payment_date" class="form-control" required></td>
+                    <td><input type="date" name="payment_date" class="form-control"></td>
                 </tr>
                 <tr>
                     <td>Amount(AED):</td>
                     <td><input type="text" name="amount_aed" class="form-control"></td>
                 </tr>
-                </table>
+            </table>
+
+            <!-- Tenancy Contract Details -->
             <table>
                 <tr>
                     <th colspan="2">TENANCY CONTRACT DETAILS</th>
@@ -397,7 +422,9 @@
                         </label>
                     </td>
                 </tr>
+            </table>
 
+            <!-- Commission & Duration Section -->
             <table>
                 <tr>
                     <th colspan="2">PART 3 [COMMISSION & THE DURATION OF THE CONTRACT]</th>
@@ -412,18 +439,19 @@
                 </tr>
                 <tr>
                     <td>Commission Amount(AED):</td>
-                    <td><input type="text" name="commission_amount" class="form-control"></td>
+                    <td><input type="text" name="commission_amount" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Contract Type:</td>
-                    <td><input type="text" name="contract_type" class="form-control"></td>
+                    <td><input type="text" name="contract_type" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Activity Reporting:</td>
-                    <td><input type="text" name="activity_reporting" class="form-control"></td>
+                    <td><input type="text" name="activity_reporting" class="form-control" required></td>
                 </tr>
             </table>
 
+            <!-- Signatures Section -->
             <table>
                 <tr>
                     <th colspan="2">PART 4 [THE SIGNATURE OF THE PARTIES]</th>
@@ -433,11 +461,11 @@
                 </tr>
                 <tr>
                     <td>Name:</td>
-                    <td><input type="text" name="broker_office_name" class="form-control"></td>
+                    <td><input type="text" name="broker_office_name" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Title:</td>
-                    <td><input type="text" name="broker_office_title" class="form-control"></td>
+                    <td><input type="text" name="broker_office_title" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Date:</td>
@@ -445,9 +473,8 @@
                 </tr>
                 <tr>
                     <td>Signature:</td>
-                    <td><input type="text" name="broker_office_signature" class="form-control"></td>
+                    <td><input type="text" name="broker_office_signature" class="form-control" required></td>
                 </tr>
-                <!-- Stamp Code to be Pasted here -->
             </table>
 
             <table>
@@ -456,11 +483,11 @@
                 </tr>
                 <tr>
                     <td>Owner Name:</td>
-                    <td><input type="text" name="owner_name" class="form-control"></td>
+                    <td><input type="text" name="owner_name" class="form-control" required></td>
                 </tr>
                 <tr>
                     <td>Signature:</td>
-                    <td><input type="text" name="owner_signature" class="form-control"></td>
+                    <td><input type="text" name="owner_signature" class="form-control" required></td>
                 </tr>
             </table>
 
@@ -479,49 +506,272 @@
                 </tr>
             </table>
 
-<!-- <div class="signature-section">
-    <div class="signature-box">
-        <p><strong>Agent A</strong></p>
-        <br>
-        <input type="text" name="agent_a_signature" class="form-control" style="border: none; border-bottom: 1px solid #000; border-radius: 0; text-align: center; box-shadow: none;" required>
-    </div>
-    <div class="signature-box">
-        <p><strong>Agent B</strong></p>
-        <br>
-        <input type="text" name="agent_b_signature" class="form-control" style="border: none; border-bottom: 1px solid #000; border-radius: 0; text-align: center; box-shadow: none;" required>
-    </div>
-</div>
-
             <button type="submit" style="margin-top: 20px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px;">Submit</button>
         </form>
 
-        <div class="footer">
-            Contract Code: IRE/F-A/112016RO
+        <!-- Preview Container -->
+        <div id="previewContainer">
+            <h2>Contract Preview</h2>
+            <div id="previewContent"></div>
+            <button class="download-btn" onclick="downloadPDF()">Download PDF</button>
         </div>
-        <div>
-            203 Al Sharafi Building | Bur Dubai, Dubai UAE | P.O Box 118163 | Dubai UAE
-        </div>
-        <div>
-            Phone : +971 4 3519995 | Fax: +971 43515611 | www.indus-re.com
-        </div>
-    </div> -->
-            <button type="submit" style="margin-top: 20px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px;">Submit</button>
-        </form>
+
         <div style="align-content: center;" class="footer">
            www.dubailand.gov.ae
         </div>
+    </div>
 
     <script>
-    document.getElementById('agent_name').addEventListener('change', function() {
-        var selectedOption = this.options[this.selectedIndex];
-        var brn = selectedOption.getAttribute('data-brn');
-        var mobile = selectedOption.getAttribute('data-mobile');
-        var email = selectedOption.getAttribute('data-email');
+    // Define agents for both locations
+    const agents = {
+        DMCC: [
+            {name: "TAMIR ABDELKARIM", brn: "76172", mobile: "507109122", email: "tamir.abdelkarim@indusre.ae"},
+            {name: "RUPESH KUMAR GOVINDANI", brn: "76013", mobile: "529711668", email: "rupesh.govindani@indusre.ae"},
+            {name: "DAWYNNE DARRYL PETERSEN", brn: "73501", mobile: "585708097", email: "dawynne.petersen@indusre.ae"},
+            {name: "DIPTI NAIR", brn: "48604", mobile: "556610924", email: "dipti.nair@indusre.ae"},
+            {name: "LI LI HSIEH CHEN TSAI TAO", brn: "42414", mobile: "568853394", email: "kim.hsieh@indusre.ae"},
+            {name: "PAURAS PRAVINCHANDRA SHAH", brn: "52032", mobile: "561624784", email: "pauras@indusre.ae"},
+            {name: "TAHSEEN IBRAHIM MUNSHI", brn: "55464", mobile: "527186123", email: "Tahseen.munshi@indusre.ae"},
+            {name: "SAGAR ABBAS", brn: "37908", mobile: "558148095", email: "sagar@indusre.ae"},
+            {name: "NARDOS GIDEY BIRHANU", brn: "82279", mobile: "502258701", email: "nardos.gidey@indusre.ae"},
+            {name: "MELANIE JANE O KEEFE", brn: "56089", mobile: "585087377", email: "mel.okeefe-jones@indusre.ae"}
+        ],
+        LLC: [
+            {name: "HAMIR KESHAVJI ASHER", brn: "1199", mobile: "505517804", email: "hamir@indusre.ae"},
+            {name: "MANISH GARG", brn: "70381", mobile: "561672681", email: "ire-accounts@indusre.ae"},
+            {name: "ANEET KUMAR BHAMBHANI", brn: "29569", mobile: "552320168", email: "aneet.kumar@indusre.ae"},
+            {name: "NARAYAN BHAGWANDAS", brn: "11185", mobile: "558834941", email: "narayan.nihalani@indusre.ae"},
+            {name: "REYNALDA LATOZA OBILLOS", brn: "33252", mobile: "545154755", email: "reyn.obillos@indusre.ae"},
+            {name: "SANTOSH KHOT", brn: "36850", mobile: "503573561", email: "santosh@indusre.ae"},
+            {name: "NISHANT KUMAR TAHILRAMANI", brn: "30361", mobile: "555963603", email: "nishant.tahilramani@indusre.ae"},
+            {name: "KAMLESH PAGARANI", brn: "36969", mobile: "559291729", email: "kamlesh.pagarani@gmail.com"},
+            {name: "RAJIV MANOHAR GHANEKAR", brn: "26133", mobile: "506258132", email: "Rajiv.Ghanekar@indusre.ae"},
+            {name: "AFZAL KHAN", brn: "35461", mobile: "502996070", email: "afzal@indusre.ae"},
+            {name: "MAMTA SHARMA OM PRAKASH SHARMA NATWAL", brn: "79024", mobile: "585826833", email: "Mamta.Sharma@indusre.ae"}
+        ]
+    };
 
-        document.getElementById('BRN').value = brn || '';
-        document.getElementById('agent_mobile').value = mobile || '';
-        document.getElementById('agent_email').value = email || '';
+    // Define office details for both locations
+    const officeDetails = {
+        DMCC: {
+            officeName: "Indus Real Estate (LLC) DMCC Branch",
+            licenseAuthority: "DMCC",
+            orn: "22926",
+            licenseNo: "DMCC-446268",
+            fax: "04 241 2888",
+            phone: "04 241 2888",
+            address: "Office 4H Almas Tower, JLT, DMCC, Dubai, UAE",
+            email: "reception@indusre.ae"
+        },
+        LLC: {
+            officeName: "Indus Real Estate (LLC)",
+            licenseAuthority: "RERA",
+            orn: "22926",
+            licenseNo: "",
+            fax: "+971 43515611",
+            phone: "+971 4 3519995",
+            address: "203 Al Sharafi Building, Bur Dubai, Dubai, UAE",
+            email: "reception@indusre.ae"
+        }
+    };
+
+    // Function to update agent options based on selected location
+    function updateAgentOptions() {
+        const location = document.querySelector('input[name="location"]:checked').value;
+        const agentSelect = document.getElementById('agent_name');
+        
+        // Clear existing options
+        agentSelect.innerHTML = '<option value="" disabled selected>Select an Agent</option>';
+        
+        // Add new options based on location
+        agents[location].forEach(agent => {
+            const option = document.createElement('option');
+            option.value = agent.name;
+            option.textContent = agent.name;
+            option.setAttribute('data-brn', agent.brn);
+            option.setAttribute('data-mobile', agent.mobile);
+            option.setAttribute('data-email', agent.email);
+            agentSelect.appendChild(option);
+        });
+    }
+
+    // Function to update office details based on selected location
+    function updateOfficeDetails() {
+        const location = document.querySelector('input[name="location"]:checked').value;
+        const details = officeDetails[location];
+        
+        document.getElementById('office_name').value = details.officeName;
+        document.getElementById('license_authority').value = details.licenseAuthority;
+        document.getElementById('agent_orn').value = details.orn;
+        document.getElementById('agent_license_no').value = details.licenseNo;
+        document.getElementById('agent_fax').value = details.fax;
+        document.getElementById('agent_phone').value = details.phone;
+        document.getElementById('agent_address').value = details.address;
+        document.getElementById('agent_email').value = details.email;
+        
+        // Also update the agent options
+        updateAgentOptions();
+    }
+
+    // Initialize with DMCC details
+    document.addEventListener('DOMContentLoaded', function() {
+        updateOfficeDetails();
+        
+        // Add event listener for agent selection
+        document.getElementById('agent_name').addEventListener('change', function() {
+            var selectedOption = this.options[this.selectedIndex];
+            var brn = selectedOption.getAttribute('data-brn');
+            var mobile = selectedOption.getAttribute('data-mobile');
+            var email = selectedOption.getAttribute('data-email');
+
+            document.getElementById('BRN').value = brn || '';
+            document.getElementById('agent_mobile').value = mobile || '';
+            document.getElementById('agent_email_personal').value = email || '';
+        });
+
+        // Handle form submission
+        document.getElementById('agreementForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showPreview();
+        });
     });
-</script>
+
+    // Function to show preview of the contract
+    function showPreview() {
+        const formData = new FormData(document.getElementById('agreementForm'));
+        const previewContent = document.getElementById('previewContent');
+        previewContent.innerHTML = '';
+        
+        // Create preview HTML
+        let previewHTML = `
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img src="/uploads/indus.png" alt="Indus Logo" style="max-width: 100px;">
+                <h2>CONTRACT BETWEEN SELLER AND BROKER</h2>
+                <p>Date: ${formData.get('dated')}</p>
+            </div>
+            
+            <h3>PART 1 - THE PARTIES</h3>
+            <h4>THE BROKER OFFICE / AGENT DETAILS</h4>
+            <table border="1" cellpadding="5" cellspacing="0" width="100%">
+                <tr>
+                    <td width="30%"><strong>Office Name:</strong></td>
+                    <td>${formData.get('office_name')}</td>
+                </tr>
+                <tr>
+                    <td><strong>License Authority:</strong></td>
+                    <td>${formData.get('license_authority')}</td>
+                </tr>
+                <tr>
+                    <td><strong>Address:</strong></td>
+                    <td>${formData.get('agent_address')}</td>
+                </tr>
+                <tr>
+                    <td><strong>Contact:</strong></td>
+                    <td>${formData.get('agent_phone')} | ${formData.get('agent_email')}</td>
+                </tr>
+                <tr>
+                    <td><strong>Agent Name:</strong></td>
+                    <td>${formData.get('agent_name')}</td>
+                </tr>
+                <tr>
+                    <td><strong>BRN:</strong></td>
+                    <td>${formData.get('agent_brn')}</td>
+                </tr>
+                <tr>
+                    <td><strong>Mobile:</strong></td>
+                    <td>${formData.get('agent_mobile')}</td>
+                </tr>
+            </table>
+            
+            <h4>THE PROPERTY OWNER'S DETAILS</h4>
+            <table border="1" cellpadding="5" cellspacing="0" width="100%">
+                <tr>
+                    <td width="30%"><strong>Name:</strong></td>
+                    <td>${formData.get('name_of_owner')}</td>
+                </tr>
+                <tr>
+                    <td><strong>Passport Number:</strong></td>
+                    <td>${formData.get('passport_number')}</td>
+                </tr>
+                <tr>
+                    <td><strong>Mobile:</strong></td>
+                    <td>${formData.get('owner_mobile')}</td>
+                </tr>
+                <tr>
+                    <td><strong>Address:</strong></td>
+                    <td>${formData.get('owner_address')}</td>
+                </tr>
+                <tr>
+                    <td><strong>Email:</strong></td>
+                    <td>${formData.get('owner_email')}</td>
+                </tr>
+            </table>
+            
+            <h3>PART 2 - THE PROPERTY</h3>
+            <table border="1" cellpadding="5" cellspacing="0" width="100%">
+                <tr>
+                    <td width="30%"><strong>Property Location:</strong></td>
+                    <td>${formData.get('property_location')}</td>
+                </tr>
+                <tr>
+                    <td><strong>Type of Property:</strong></td>
+                    <td>${formData.get('type_of_property')}</td>
+                </tr>
+                <tr>
+                    <td><strong>Project Name:</strong></td>
+                    <td>${formData.get('project_name')}</td>
+                </tr>
+                <tr>
+                    <td><strong>Listed Price:</strong></td>
+                    <td>${formData.get('listed_price')}</td>
+                </tr>
+                <tr>
+                    <td><strong>Facilities:</strong></td>
+                    <td>${formData.get('facilities')}</td>
+                </tr>
+            </table>
+            
+            <h3>PART 3 - COMMISSION & DURATION</h3>
+            <table border="1" cellpadding="5" cellspacing="0" width="100%">
+                <tr>
+                    <td width="30%"><strong>Contract Period:</strong></td>
+                    <td>${formData.get('contract_start_date')} to ${formData.get('contract_end_date')}</td>
+                </tr>
+                <tr>
+                    <td><strong>Commission Amount:</strong></td>
+                    <td>${formData.get('commission_amount')} AED</td>
+                </tr>
+            </table>
+            
+            <h3>PART 4 - SIGNATURES</h3>
+            <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+                <div style="width: 45%; text-align: center;">
+                    <p><strong>Broker Office Representative</strong></p>
+                    <p>${formData.get('broker_office_name')}</p>
+                    <p>${formData.get('broker_office_signature')}</p>
+                    <p>Date: ${formData.get('broker_office_signature_date')}</p>
+                </div>
+                <div style="width: 45%; text-align: center;">
+                    <p><strong>Property Owner</strong></p>
+                    <p>${formData.get('owner_name')}</p>
+                    <p>${formData.get('owner_signature')}</p>
+                    <p>Date: ${formData.get('broker_office_signature_date')}</p>
+                </div>
+            </div>
+        `;
+        
+        previewContent.innerHTML = previewHTML;
+        document.getElementById('previewContainer').style.display = 'block';
+        
+        // Scroll to preview
+        document.getElementById('previewContainer').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Function to download PDF
+    function downloadPDF() {
+        // Submit the form which will generate and return the PDF
+        document.getElementById('agreementForm').submit();
+    }
+    </script>
 </body>
 </html>
